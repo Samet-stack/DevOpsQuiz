@@ -35,7 +35,16 @@ public class ScoreManager {
     private final Path fichier;
 
     public ScoreManager() {
-        this(FICHIER_PAR_DEFAUT);
+        this(fichierParDefaut());
+    }
+
+    /**
+     * Dossier des scores : "data" par défaut, ou la valeur de la propriété système
+     * devopsquiz.data (utilisée par les tests pour ne pas toucher au vrai fichier).
+     */
+    static Path fichierParDefaut() {
+        String dossier = System.getProperty("devopsquiz.data");
+        return dossier == null ? FICHIER_PAR_DEFAUT : Path.of(dossier, "scores.csv");
     }
 
     public ScoreManager(Path fichier) {
