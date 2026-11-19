@@ -8,7 +8,11 @@ public class DevOpsQuiz {
 
         while (!quitter) {
             afficherMenu();
-            int choix = Integer.parseInt(sc.nextLine().trim());
+            int choix = lireChoix(sc, 1, 4);
+
+            if (choix == -1) {
+                break;
+            }
 
             switch (choix) {
                 case 1:
@@ -24,12 +28,28 @@ public class DevOpsQuiz {
                     System.out.println("À bientôt !");
                     quitter = true;
                     break;
-                default:
-                    System.out.println("Choix invalide.");
             }
         }
 
         sc.close();
+    }
+
+    private static int lireChoix(Scanner sc, int min, int max) {
+        while (true) {
+            if (!sc.hasNextLine()) {
+                return -1;
+            }
+            String saisie = sc.nextLine().trim();
+            try {
+                int valeur = Integer.parseInt(saisie);
+                if (valeur >= min && valeur <= max) {
+                    return valeur;
+                }
+                System.out.print("Choix invalide, entrez un nombre entre " + min + " et " + max + " : ");
+            } catch (NumberFormatException e) {
+                System.out.print("Entrez un chiffre entre " + min + " et " + max + " : ");
+            }
+        }
     }
 
     private static void afficherMenu() {
