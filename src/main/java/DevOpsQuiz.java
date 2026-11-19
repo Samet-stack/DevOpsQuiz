@@ -1,8 +1,16 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class DevOpsQuiz {
 
     public static void main(String[] args) {
+        ecrireLog("INFO", "Lancement de DevOpsQuiz");
+
         Scanner sc = new Scanner(System.in);
         boolean quitter = false;
 
@@ -32,6 +40,7 @@ public class DevOpsQuiz {
         }
 
         sc.close();
+        ecrireLog("INFO", "Fermeture de DevOpsQuiz");
     }
 
     private static int lireChoix(Scanner sc, int min, int max) {
@@ -46,8 +55,10 @@ public class DevOpsQuiz {
                     return valeur;
                 }
                 System.out.print("Choix invalide, entrez un nombre entre " + min + " et " + max + " : ");
+                ecrireLog("ERROR", "Choix invalide : " + saisie);
             } catch (NumberFormatException e) {
                 System.out.print("Entrez un chiffre entre " + min + " et " + max + " : ");
+                ecrireLog("ERROR", "Saisie incorrecte : " + saisie);
             }
         }
     }
@@ -69,5 +80,22 @@ public class DevOpsQuiz {
         System.out.println("- Tu réponds à 10 questions avec les choix A, B, C ou D.");
         System.out.println("- 1 point par bonne réponse.");
         System.out.println("- Ton score est sauvegardé à la fin avec ton pseudo et la date.");
+    }
+
+    public static void ecrireLog(String niveau, String message) {
+        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        String ligne = "[" + date + "] [" + niveau + "] " + message;
+        if ("ERROR".equals(niveau)) {
+            System.err.println(ligne);
+        } else {
+            System.out.println(ligne);
+        }
+        try {
+            Files.createDirectories(Path.of("logs"));
+            Files.writeString(Path.of("logs/quiz.log"), ligne + System.lineSeparator(),
+                StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            System.err.println("Erreur ecriture log");
+        }
     }
 }
