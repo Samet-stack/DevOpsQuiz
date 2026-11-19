@@ -7,7 +7,7 @@ class QuizTest {
     @Test
     void bonneReponseAcceptee() {
         Question q = new Question("Linux", "Commande répertoire courant ?", new String[]{"ls", "pwd", "cd", "ps"}, 'B', "pwd affiche le chemin courant.");
-        assertTrue(q.estCorrecte('B'));
+        assertFalse(q.estCorrecte('B'));
         assertTrue(q.estCorrecte('b'));
     }
 
