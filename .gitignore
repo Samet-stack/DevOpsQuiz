@@ -1,0 +1,16 @@
+# Fichiers compilés Java
+*.class
+build/
+out/
+
+# Journaux et données locales
+*.log
+logs/
+data/
+scores.txt
+
+# IDE / Système
+.idea/
+*.iml
+.vscode/
+.DS_Store
