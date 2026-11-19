@@ -47,7 +47,7 @@ public class DevOpsQuiz {
 
     private static void afficherMenu() {
         System.out.println();
-        System.out.println("DEVOPS QUIZ");
+        System.out.println("DEVOPS QUIZ (v1.1.0)");
         System.out.println("1. Commencer un quiz");
         System.out.println("2. Consulter les règles");
         System.out.println("3. Afficher les meilleurs scores");
@@ -67,11 +67,11 @@ public class DevOpsQuiz {
 
         System.out.println("\nChoisissez une catégorie :");
         System.out.println("1. Quiz général (10 questions)");
-        System.out.println("2. Linux");
-        System.out.println("3. Git");
-        System.out.println("4. Jenkins");
-        System.out.println("5. Docker");
-        System.out.println("6. DevOps");
+        System.out.println("2. Linux (" + BanqueQuestions.getParCategorie("Linux").size() + " questions)");
+        System.out.println("3. Git (" + BanqueQuestions.getParCategorie("Git").size() + " questions)");
+        System.out.println("4. Jenkins (" + BanqueQuestions.getParCategorie("Jenkins").size() + " questions)");
+        System.out.println("5. Docker (" + BanqueQuestions.getParCategorie("Docker").size() + " questions)");
+        System.out.println("6. DevOps (" + BanqueQuestions.getParCategorie("DevOps").size() + " questions)");
         System.out.print("Votre choix (1-6) : ");
 
         int cat = lireChoix(sc, 1, 6);
@@ -85,6 +85,7 @@ public class DevOpsQuiz {
             return;
         }
 
+        long debutMs = System.currentTimeMillis();
         int score = 0;
         int total = questions.size();
 
@@ -105,7 +106,8 @@ public class DevOpsQuiz {
             System.out.println("Explication : " + q.getExplication());
         }
 
-        afficherResultat(pseudo, score, total);
+        long dureeSec = (System.currentTimeMillis() - debutMs) / 1000;
+        afficherResultat(pseudo, score, total, dureeSec);
         try {
             scoreManager.sauvegarder(pseudo, score, total);
             ecrireLog("INFO", "Fin de partie : pseudo=" + pseudo + ", score=" + score + "/" + total);
@@ -126,11 +128,11 @@ public class DevOpsQuiz {
         }
     }
 
-    private static void afficherResultat(String pseudo, int score, int total) {
+    private static void afficherResultat(String pseudo, int score, int total, long dureeSec) {
         double pct = (total > 0) ? (score * 100.0) / total : 0.0;
         System.out.println();
         System.out.println("--- Résultat final ---");
-        System.out.printf("Joueur : %s | Score : %d/%d (%.1f%%)%n", pseudo, score, total, pct);
+        System.out.printf("Joueur : %s | Score : %d/%d (%.1f%%) | Temps : %ds%n", pseudo, score, total, pct, dureeSec);
         if (pct >= 80) {
             System.out.println("Excellent travail !");
         } else if (pct >= 50) {
